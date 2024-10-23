@@ -54,6 +54,13 @@ const router = createRouter({
                     component: () => import('../components/dashboard/views/ProfileView.vue'),
                     meta: { window: "profile" }
                 },
+                {
+                    path: 'analytics',
+                    name: 'AnalyticsPage',
+                    component: () => import('../components/dashboard/views/AnalyticsView.vue'),
+                    meta: { window: "analytics" }
+                },
+                
             ]
         },
         {
