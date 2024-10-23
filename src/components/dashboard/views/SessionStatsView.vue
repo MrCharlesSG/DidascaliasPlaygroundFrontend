@@ -47,6 +47,7 @@
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
+import { useRoute } from 'vue-router'; // Importar useRoute para acceder a los parámetros de la ruta
 import { LoaderIcon } from 'lucide-vue-next';
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -60,12 +61,21 @@ const loading = ref(true);
 const error = ref(null);
 let chart = null;
 
+const route = useRoute(); // Obtener la ruta actual
+
+// Función para extraer el último segmento de la URI
+const extractSessionIdFromUrl = () => {
+  const segments = route.path.split('/');
+  return segments[segments.length - 1]; // Obtener el último segmento (ID de la sesión)
+};
+
+const sessionId = extractSessionIdFromUrl(); // Obtener el ID de la sesión
+
 // Función para obtener datos del servidor
 const fetchData = async () => {
   loading.value = true; // Activar indicador de carga
   try {
-    const response = await axios.get('http://localhost:3000/session/info/1'); // Llamada a la API
-    console.log("The respones ", response)
+    const response = await axios.get(`http://localhost:3000/session/info/${sessionId}`); // Usar sessionId en la llamada a la API
     data.value = response.data; // Asignar datos de la respuesta
   } catch (e) {
     error.value = "Error al cargar los datos. Por favor, intente de nuevo más tarde.";
