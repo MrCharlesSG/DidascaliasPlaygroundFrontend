@@ -31,7 +31,7 @@ export default {
         this.sessionRequest = true;
                 
         console.log("Sending session request...");
-        fetch("https://cyclops.uab.cat/api/session/" + this.session)
+        fetch("http:/badUri/api/session/" + this.session)
         .then(res => res.json())
         .then(data => {
           if (data.success && data.message) {

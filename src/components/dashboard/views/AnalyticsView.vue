@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-slate-100 p-8">
+    <div class="min-h-screen bg-slate-50 p-8">
       <div class="max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row mb-8">
           <div class="flex-grow mb-8 md:mb-0">
@@ -39,7 +39,6 @@
                         Sesión #{{ session.id }}
                       </label>
                     </div>
-                    <span class="text-sm font-medium text-slate-600">Grupo {{ session.groupNumber }}</span>
                   </div>
                   <div class="flex items-center mb-2">
                     <ClockIcon class="w-5 h-5 text-slate-500 mr-2" />

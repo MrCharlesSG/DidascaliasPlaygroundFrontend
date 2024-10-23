@@ -61,7 +61,7 @@ export const useUserStore = defineStore('userStore', {
       router.push({ name: 'HomePage' });
     },
     async checkToken() {
-      fetch("https://cyclops.uab.cat/api/TODO:", {
+      fetch("http:/badUri/api/TODO:", {
         headers: { 
           'Content-Type': 'application/json',
         },
@@ -110,7 +110,7 @@ export const useUserStore = defineStore('userStore', {
     isSuperUser() {
       return new Promise((resolve, reject) => {
 
-        fetch("https://cyclops.uab.cat/api/isSuperAdmin", {
+        fetch("http:/badUri/api/isSuperAdmin", {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -36,7 +36,7 @@ export default {
     // Get groups from DB TODO: change to real DB
     // TODO: Handle empty response (Nonify)
 
-    this.apiCall('https://cyclops.uab.cat/api/getGroups')
+    this.apiCall('badUri')
     .then(data => {
       this.groups = data.groups; 
     })

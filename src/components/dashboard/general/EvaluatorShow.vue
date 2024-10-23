@@ -57,7 +57,7 @@
       },
 
       updateStats() {
-        this.apiCall('https://cyclops.uab.cat/api/getDashboard')
+        this.apiCall('http:/badUri/api/getDashboard')
         .then(data => {
           this.groupsAmount = data.groupAmount;
           this.studentsAmount = data.studentAmount;

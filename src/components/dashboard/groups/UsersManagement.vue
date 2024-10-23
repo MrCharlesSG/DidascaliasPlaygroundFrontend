@@ -66,7 +66,7 @@ export default {
     // Get students from DB TODO: change to real DB
     // TODO: Handle empty response (Nonify)
 
-    this.apiCall('https://cyclops.uab.cat/api/getStudents')
+    this.apiCall('http:/badUri/api/getStudents')
     .then(data => {
       this.students = data.students;
     })

@@ -138,7 +138,7 @@
 
       getStudentPositions() {
         console.log("Getting student positions with id " + this.$route.params.sessionId);
-        fetch("https://cyclops.uab.cat/api/session/" + this.$route.params.sessionId + "/startWS")
+        fetch("http:/badUri/api/session/" + this.$route.params.sessionId + "/startWS")
         .then(response => response.json())
         .then(retrievedData => {
           if (retrievedData.data == null || retrievedData.data == undefined) {

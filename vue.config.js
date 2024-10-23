@@ -4,8 +4,8 @@ module.exports = defineConfig({
 
   // For the cyclops server
   devServer: {
-    https: true,
-    port: 443,
+    https: false,
+    port: 3001,
   },
 
   productionSourceMap: true,

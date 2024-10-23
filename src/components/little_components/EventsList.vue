@@ -21,7 +21,7 @@
     methods: {
       sendEvent() {
         console.log("Sending event " + this.eventId);
-        fetch("https://cyclops.uab.cat" + '/api/callEvent/' + this.eventId,
+        fetch("http:/badUri" + '/api/callEvent/' + this.eventId,
         {
           headers: { 
             'Content-Type': 'application/json',

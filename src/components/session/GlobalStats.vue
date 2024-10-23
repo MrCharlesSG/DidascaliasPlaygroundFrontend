@@ -57,7 +57,7 @@ import GraphicalStats from './GraphicalStats.vue';
     },
     methods: {
         fetchData() {
-            fetch("https://cyclops.uab.cat/api/session/" + this.sessionID + "/ongoingWS")
+            fetch("http:/badUri/api/session/" + this.sessionID + "/ongoingWS")
                 .then(response => response.json())
                 .then(retrievedData => {
                 this.actualData = retrievedData.data;

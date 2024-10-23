@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { useUserStore } from '@/store/useUserStore';
+//import { useUserStore } from '@/store/useUserStore';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -85,22 +85,17 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     //return true;
-    const userStore = useUserStore();
+    //const userStore = useUserStore();
 
     // Control access to dashboard and instances
-    if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
+    /*if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
         && !userStore.isLoggedIn) 
     {
         return '/';
-    }
+    }*/
 
-    if (to.path == '/' && userStore.isLoggedIn) {
+    if (to.path == '/') {
         return '/dashboard';
-    }
-
-    if (to.path.split('/')[1] == 'instances') {
-        let isSuper = await userStore.isSuperUser();
-        return isSuper ? true : '/dashboard';
     }
 
     
