@@ -64,8 +64,8 @@ const router = createRouter({
                 {
                     path: 'sessions/:sessionId',
                     name: 'SessionStatsPage',
-                    component: () => import('../components/dashboard/views/StatsView.vue'),
-                    meta: { window: "" }
+                    component: () => import('../components/dashboard/views/SessionStatsView.vue'),
+                    meta: { window: "Session Stats" }
                 },
                 
             ]

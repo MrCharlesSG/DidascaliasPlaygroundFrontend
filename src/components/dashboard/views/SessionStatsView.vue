@@ -49,7 +49,10 @@
 import { ref, onMounted, watch, nextTick } from 'vue'
 import { LoaderIcon } from 'lucide-vue-next'
 import Chart from 'chart.js/auto'
+import annotationPlugin from 'chartjs-plugin-annotation' // MODIFIED: Importar el plugin de anotación
 import stats from '/src/api/stats.json'
+
+Chart.register(annotationPlugin) // MODIFIED: Registrar el plugin
 
 const chartRef = ref(null)
 const data = ref(null)
@@ -59,7 +62,6 @@ let chart = null
 
 const fetchData = async () => {
   try {
-
     data.value = stats;
   } catch (e) {
     error.value = "Error al cargar los datos. Por favor, intente de nuevo más tarde."
@@ -74,11 +76,27 @@ const createChart = () => {
   }
 
   const ctx = chartRef.value.getContext('2d')
+
   const datasets = ['MOV_HAND_LEFT', 'MOV_HAND_RIGHT', 'MOV_HEAD'].map(name => ({
     label: name,
     data: data.value.stats.filter(stat => stat.nombre === name).map(stat => stat.valor),
     borderColor: getColor(name),
     tension: 0.1
+  }))
+
+  // MODIFIED: Añadir anotaciones para los eventos
+  const annotations = data.value.events.map(event => ({
+    type: 'line',
+    scaleID: 'x', // Eje X
+    value: formatTime(event.momento), // El momento del evento
+    borderColor: getEventColor(event.type),
+    borderWidth: 2,
+    label: {
+      content: event.type,
+      enabled: true,
+      position: 'start',
+      backgroundColor: getEventColor(event.type),
+    }
   }))
 
   chart = new Chart(ctx, {
@@ -92,6 +110,11 @@ const createChart = () => {
       scales: {
         y: {
           beginAtZero: true
+        }
+      },
+      plugins: {
+        annotation: {
+          annotations: annotations // MODIFIED: Asignar las anotaciones de eventos
         }
       }
     }
@@ -140,8 +163,6 @@ const getEventColor = (type) => {
       return 'bg-gray-500'
   }
 }
-
-
 
 onMounted(async () => {
   await fetchData();
