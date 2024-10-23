@@ -89,7 +89,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { CalendarIcon, ClockIcon, XIcon, ChevronUpIcon, ChevronDownIcon, ArrowRightIcon } from 'lucide-vue-next'
+import { ClockIcon, XIcon, ChevronUpIcon, ChevronDownIcon, ArrowRightIcon } from 'lucide-vue-next'
 
 const sessions = ref([
   { id: 1, date: '2023-05-15', duration: '1h 30min', groupNumber: 3 },

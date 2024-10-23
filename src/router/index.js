@@ -60,6 +60,13 @@ const router = createRouter({
                     component: () => import('../components/dashboard/views/AnalyticsView.vue'),
                     meta: { window: "analytics" }
                 },
+
+                {
+                    path: 'sessions/:sessionId',
+                    name: 'SessionStatsPage',
+                    component: () => import('../components/dashboard/views/StatsView.vue'),
+                    meta: { window: "" }
+                },
                 
             ]
         },

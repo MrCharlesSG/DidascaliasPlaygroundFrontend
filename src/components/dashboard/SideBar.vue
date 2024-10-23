@@ -33,6 +33,11 @@
         <!--<img src="../assets/dashboard.png" alt="dashboard" id="dashboard">-->
         <p>📊 Analytics</p> <br>
       </router-link>
+
+      <router-link to="/dashboard/sessions/1" class="btn btn-primary" @click="$emit('clickedOnLink')">
+        <!--<img src="../assets/dashboard.png" alt="dashboard" id="dashboard">-->
+        <p>📊 Stats</p> <br>
+      </router-link>
     </div>
     
     <div id="sidebarBottom">
