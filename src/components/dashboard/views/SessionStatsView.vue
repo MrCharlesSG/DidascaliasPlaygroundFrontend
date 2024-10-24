@@ -16,7 +16,12 @@
       <div v-else>
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 class="text-xl font-semibold text-slate-800 mb-4">Gráfico de Movimiento</h2>
-          <canvas ref="chartRef" v-if="data"></canvas> <!-- Agregar v-if aquí -->
+          <apexchart
+            type="line"
+            height="400"
+            :options="chartOptions"
+            :series="series"
+          ></apexchart>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -46,93 +51,92 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router'; // Importar useRoute para acceder a los parámetros de la ruta
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { LoaderIcon } from 'lucide-vue-next';
-import Chart from 'chart.js/auto';
-import annotationPlugin from 'chartjs-plugin-annotation';
 import axios from 'axios';
 
-Chart.register(annotationPlugin);
-
-const chartRef = ref(null);
 const data = ref(null);
 const loading = ref(true);
 const error = ref(null);
-let chart = null;
 
-const route = useRoute(); // Obtener la ruta actual
+const route = useRoute();
 
-// Función para extraer el último segmento de la URI
 const extractSessionIdFromUrl = () => {
   const segments = route.path.split('/');
-  return segments[segments.length - 1]; // Obtener el último segmento (ID de la sesión)
+  return segments[segments.length - 1];
 };
 
-const sessionId = extractSessionIdFromUrl(); // Obtener el ID de la sesión
+const sessionId = extractSessionIdFromUrl();
 
-// Función para obtener datos del servidor
 const fetchData = async () => {
-  loading.value = true; // Activar indicador de carga
+  loading.value = true;
   try {
-    const response = await axios.get(`http://localhost:3000/session/info/${sessionId}`); // Usar sessionId en la llamada a la API
-    data.value = response.data; // Asignar datos de la respuesta
+    const response = await axios.get(`http://localhost:3000/session/info/${sessionId}`);
+    data.value = response.data;
   } catch (e) {
     error.value = "Error al cargar los datos. Por favor, intente de nuevo más tarde.";
   } finally {
-    loading.value = false; // Desactivar indicador de carga
+    loading.value = false;
   }
 };
 
-const createChart = () => {
-  if (chart) {
-    chart.destroy();
-  }
-
-  const ctx = chartRef.value.getContext('2d'); // Aquí puede fallar si chartRef.value es null
-
-  const datasets = ['MOV_HAND_LEFT', 'MOV_HAND_RIGHT', 'MOV_HEAD'].map(name => ({
-    label: name,
-    data: data.value.stats.filter(stat => stat.nombre === name).map(stat => stat.valor),
-    borderColor: getColor(name),
-    tension: 0.1
+const series = computed(() => {
+  if (!data.value) return [];
+  
+  return ['MOV_HAND_LEFT', 'MOV_HAND_RIGHT', 'MOV_HEAD'].map(name => ({
+    name,
+    data: data.value.stats.filter(stat => stat.nombre === name).map(stat => ({
+      x: new Date(stat.momento).getTime(),
+      y: stat.valor
+    }))
   }));
+});
 
-  const annotations = data.value.events.map(event => ({
+const chartOptions = computed(() => ({
+  chart: {
     type: 'line',
-    scaleID: 'x',
-    value: formatTime(event.momento),
-    borderColor: getEventColor(event.type),
-    borderWidth: 2,
-    label: {
-      content: event.type,
-      enabled: true,
-      position: 'start',
-      backgroundColor: getEventColor(event.type),
+    height: 400,
+    animations: {
+      enabled: false
     }
-  }));
-
-  chart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: data.value.stats.filter(stat => stat.nombre === 'MOV_HAND_LEFT').map(stat => formatTime(stat.momento)),
-      datasets
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      },
-      plugins: {
-        annotation: {
-          annotations: annotations
-        }
+  },
+  xaxis: {
+    type: 'datetime'
+  },
+  yaxis: {
+    title: {
+      text: 'Valor'
+    }
+  },
+  colors: ['#4bc0c0', '#ff6384', '#36a2eb'],
+  stroke: {
+    curve: 'smooth',
+    width: 2
+  },
+  markers: {
+    size: 0
+  },
+  tooltip: {
+    x: {
+      format: 'HH:mm'
+    }
+  },
+  annotations: {
+    xaxis: data.value ? data.value.events.map(event => ({
+      x: new Date(event.momento).getTime(),
+      borderColor: getEventColorHex(event.type),
+      label: {
+        borderColor: getEventColorHex(event.type),
+        style: {
+          color: '#fff',
+          background: getEventColorHex(event.type)
+        },
+        text: event.type
       }
-    }
-  });
-};
+    })) : []
+  }
+}));
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleString('es-ES', {
@@ -151,19 +155,6 @@ const formatTime = (dateString) => {
   });
 };
 
-const getColor = (name) => {
-  switch (name) {
-    case 'MOV_HAND_LEFT':
-      return 'rgb(75, 192, 192)';
-    case 'MOV_HAND_RIGHT':
-      return 'rgb(255, 99, 132)';
-    case 'MOV_HEAD':
-      return 'rgb(54, 162, 235)';
-    default:
-      return 'rgb(201, 203, 207)';
-  }
-};
-
 const getEventColor = (type) => {
   switch (type) {
     case 'TALK':
@@ -177,18 +168,23 @@ const getEventColor = (type) => {
   }
 };
 
-onMounted(async () => {
-  await fetchData();
-  await nextTick();
-  if (data.value) { // Asegurarse de que los datos están disponibles antes de crear el gráfico
-    createChart();
+const getEventColorHex = (type) => {
+  switch (type) {
+    case 'TALK':
+      return '#10B981';
+    case 'INSULT':
+      return '#EF4444';
+    case 'STAND_UP':
+      return '#F59E0B';
+    default:
+      return '#64748B';
   }
-});
+};
 
-watch(data, async () => {
-  if (data.value) {
-    await nextTick();
-    createChart();
-  }
+onMounted(fetchData);
+
+watch(data, () => {
+  // The chart will automatically update when data changes
+  // due to the use of computed properties
 });
 </script>
