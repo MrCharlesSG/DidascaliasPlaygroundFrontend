@@ -1,7 +1,9 @@
 <template>
   <div class="min-h-screen bg-slate-100 p-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl font-bold text-slate-800 mb-8">Estadísticas de Movimiento</h1>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8">
+        Estadísticas de Movimiento {{ isMultiSession ? '(Múltiples Sesiones)' : '' }}
+      </h1>
 
       <div v-if="loading" class="text-center py-8">
         <LoaderIcon class="w-8 h-8 animate-spin mx-auto text-blue-500" />
@@ -25,16 +27,19 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <h2 class="text-xl font-semibold text-slate-800 mb-4">Información</h2>
-            <p><strong>Fecha de inicio:</strong> {{ formatDate(data.session[0].start_date) }}</p>
-            <p><strong>Fecha de fin:</strong> {{ formatDate(data.session[0].end_date) }}</p>
+          <div v-for="(sessionData, index) in sessionsData" :key="index" class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold text-slate-800 mb-4">
+              Información {{ isMultiSession ? `- Sesión #${sessionData.session[0].id}` : '' }}
+            </h2>
+            <p><strong>Fecha de inicio:</strong> {{ formatDate(sessionData.session[0].start_date) }}</p>
+            <p><strong>Fecha de fin:</strong> {{ formatDate(sessionData.session[0].end_date) }}</p>
           </div>
 
-          <div class="bg-white rounded-lg shadow-md p-6">
+          <!-- Eventos para una sola sesión -->
+          <div v-if="!isMultiSession" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-slate-800 mb-4">Eventos</h2>
             <ul class="space-y-2">
-              <li v-for="event in data.events" :key="event.id" class="flex items-center">
+              <li v-for="event in allEvents" :key="event.id" class="flex items-center">
                 <span 
                   class="w-3 h-3 rounded-full mr-2" 
                   :class="getEventColor(event.type)"
@@ -45,35 +50,57 @@
             </ul>
           </div>
         </div>
+
+        <!-- Eventos para múltiples sesiones -->
+        <div v-if="isMultiSession" class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-xl font-semibold text-slate-800 mb-4">Eventos</h2>
+          <ul class="space-y-2">
+            <li v-for="event in allEvents" :key="`${event.sessionId}-${event.id}`" class="flex items-center">
+              <span 
+                class="w-3 h-3 rounded-full mr-2" 
+                :class="getEventColor(event.type)"
+              ></span>
+              <span class="font-medium">{{ event.type }}</span>
+              <span class="ml-2 text-slate-600">{{ formatTime(event.momento) }}</span>
+              <span class="ml-2 text-slate-400">(Sesión #{{ event.sessionId }})</span>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { LoaderIcon } from 'lucide-vue-next';
 import axios from 'axios';
 
-const data = ref(null);
+const sessionsData = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
 const route = useRoute();
 
-const extractSessionIdFromUrl = () => {
-  const segments = route.path.split('/');
-  return segments[segments.length - 1];
-};
+const isMultiSession = computed(() => route.name === 'MultiSessionStatsPage');
 
-const sessionId = extractSessionIdFromUrl();
+const sessionIds = computed(() => {
+  if (isMultiSession.value) {
+    return route.params.sessionIds.split(',');
+  } else {
+    return [route.params.sessionId];
+  }
+});
 
 const fetchData = async () => {
   loading.value = true;
   try {
-    const response = await axios.get(`http://localhost:3000/session/info/${sessionId}`);
-    data.value = response.data;
+    const promises = sessionIds.value.map(id => 
+      axios.get(`http://localhost:3000/session/info/${id}`)
+    );
+    const responses = await Promise.all(promises);
+    sessionsData.value = responses.map(response => response.data);
   } catch (e) {
     error.value = "Error al cargar los datos. Por favor, intente de nuevo más tarde.";
   } finally {
@@ -82,15 +109,28 @@ const fetchData = async () => {
 };
 
 const series = computed(() => {
-  if (!data.value) return [];
+  if (!sessionsData.value.length) return [];
   
-  return ['MOV_HAND_LEFT', 'MOV_HAND_RIGHT', 'MOV_HEAD'].map(name => ({
-    name,
-    data: data.value.stats.filter(stat => stat.nombre === name).map(stat => ({
-      x: new Date(stat.momento).getTime(),
-      y: stat.valor
+  return sessionsData.value.flatMap((sessionData) => 
+    ['MOV_HAND_LEFT', 'MOV_HAND_RIGHT', 'MOV_HEAD'].map(name => ({
+      name: isMultiSession.value ? `${name} (Sesión #${sessionData.session[0].id})` : name,
+      data: sessionData.stats
+        .filter(stat => stat.nombre === name)
+        .map(stat => ({
+          x: new Date(stat.momento).getTime(),
+          y: stat.valor
+        }))
     }))
-  }));
+  );
+});
+
+const allEvents = computed(() => {
+  return sessionsData.value.flatMap(sessionData => 
+    sessionData.events.map(event => ({
+      ...event,
+      sessionId: sessionData.session[0].id
+    }))
+  ).sort((a, b) => new Date(a.momento) - new Date(b.momento));
 });
 
 const chartOptions = computed(() => ({
@@ -102,14 +142,17 @@ const chartOptions = computed(() => ({
     }
   },
   xaxis: {
-    type: 'datetime'
+    type: 'datetime',
+    labels: {
+      datetimeUTC: false
+    }
   },
   yaxis: {
     title: {
       text: 'Valor'
     }
   },
-  colors: ['#4bc0c0', '#ff6384', '#36a2eb'],
+  colors: ['#4bc0c0', '#ff6384', '#36a2eb', '#ffcd56', '#9966ff', '#ff9f40', '#c9cbcf', '#8a2be2', '#7fff00'],
   stroke: {
     curve: 'smooth',
     width: 2
@@ -119,11 +162,11 @@ const chartOptions = computed(() => ({
   },
   tooltip: {
     x: {
-      format: 'HH:mm'
+      format: 'dd MMM yyyy HH:mm'
     }
   },
   annotations: {
-    xaxis: data.value ? data.value.events.map(event => ({
+    xaxis: allEvents.value.map(event => ({
       x: new Date(event.momento).getTime(),
       borderColor: getEventColorHex(event.type),
       label: {
@@ -132,9 +175,9 @@ const chartOptions = computed(() => ({
           color: '#fff',
           background: getEventColorHex(event.type)
         },
-        text: event.type
+        text: isMultiSession.value ? `${event.type} (Sesión #${event.sessionId})` : event.type
       }
-    })) : []
+    }))
   }
 }));
 
@@ -182,9 +225,4 @@ const getEventColorHex = (type) => {
 };
 
 onMounted(fetchData);
-
-watch(data, () => {
-  // The chart will automatically update when data changes
-  // due to the use of computed properties
-});
 </script>

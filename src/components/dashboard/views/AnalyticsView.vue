@@ -27,6 +27,7 @@
                           :id="`session-${session.id}`" 
                           v-model="selectedSessions" 
                           :value="session"
+                          :disabled="selectedSessions.length >= 3 && !selectedSessions.includes(session)"
                           :class="{
                               'opacity-0 group-hover:opacity-100': !selectedSessions.includes(session),
                               'opacity-100': selectedSessions.includes(session)
@@ -66,13 +67,20 @@
       <div class="flex justify-between items-center mb-2">
         <h4 class="text-lg font-semibold text-slate-800">Sesiones Seleccionadas</h4>
         <div class="flex space-x-2">
-          <button 
-            @click="navigateToNewView"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            aria-label="Navegar a nueva vista"
-          >
-            <ArrowRightIcon class="w-4 h-4" />
-          </button>
+          <div class="relative">
+            <button 
+              @click="navigateToMultiSessionView"
+              :disabled="selectedSessions.length < 2"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Navegar a nueva vista"
+            >
+              <ArrowRightIcon class="w-4 h-4" />
+            </button>
+            <div v-if="selectedSessions.length < 2" class="absolute bottom-full mb-2 right-0 w-48 bg-slate-800 text-white text-xs rounded p-2 shadow-lg">
+              Selecciona al menos 2 sesiones para comparar
+              <div class="absolute bottom-0 right-2 transform translate-y-1/2 rotate-45 w-2 h-2 bg-slate-800"></div>
+            </div>
+          </div>
           <button 
             @click="isMinimized = !isMinimized"
             class="text-slate-500 hover:text-slate-700 focus:outline-none"
@@ -100,71 +108,80 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { ClockIcon, XIcon, ChevronUpIcon, ChevronDownIcon, ArrowRightIcon } from 'lucide-vue-next'
-import axios from 'axios' // Importar axios
+import axios from 'axios'
+import { useRouter } from 'vue-router'
 
 const sessions = ref([])
 const selectedSessions = ref([])
 const isMinimized = ref(false)
+const router = useRouter()
 
 const groupedSessions = computed(() => {
-const groups = {}
-sessions.value.forEach(session => {
-  const sessionDate = new Date(session.start_date).toISOString().split('T')[0] // Formato YY-MM-DD
-  if (!groups[sessionDate]) {
-    groups[sessionDate] = []
-  }
-  groups[sessionDate].push(session)
-})
-return groups
+  const groups = {}
+  sessions.value.forEach(session => {
+    const sessionDate = new Date(session.start_date).toISOString().split('T')[0] // Formato YY-MM-DD
+    if (!groups[sessionDate]) {
+      groups[sessionDate] = []
+    }
+    groups[sessionDate].push(session)
+  })
+  return groups
 })
 
 const formatDate = (dateString) => {
-const date = new Date(dateString)
-return date.toISOString().split('T')[0] // Retorna la fecha en formato YY-MM-DD
+  const date = new Date(dateString)
+  return date.toISOString().split('T')[0] // Retorna la fecha en formato YY-MM-DD
 }
 
 const formatTime = (dateString) => {
-return new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+  return new Date(dateString).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
 }
 
 const formatDuration = (start, end) => {
-const startDate = new Date(start)
-const endDate = new Date(end)
-const durationMs = endDate - startDate
-const minutes = Math.floor((durationMs / 1000 / 60) % 60)
-const hours = Math.floor(durationMs / 1000 / 60 / 60)
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+  const durationMs = endDate - startDate
+  const minutes = Math.floor((durationMs / 1000 / 60) % 60)
+  const hours = Math.floor(durationMs / 1000 / 60 / 60)
 
-return `${hours}h ${minutes}min`
+  return `${hours}h ${minutes}min`
 }
 
 const removeSelectedSession = (session) => {
-selectedSessions.value = selectedSessions.value.filter(s => s.id !== session.id)
+  selectedSessions.value = selectedSessions.value.filter(s => s.id !== session.id)
 }
 
-const navigateToNewView = () => {
-console.log('Navegando a nueva vista con sesiones:', selectedSessions.value)
+const navigateToMultiSessionView = () => {
+  if (selectedSessions.value.length >= 2) {
+    const sessionIds = selectedSessions.value.map(s => s.id).join(',')
+    router.push({ name: 'MultiSessionStatsPage', params: { sessionIds: sessionIds } })
+  }
 }
 
-// Función para obtener las sesiones desde la API
 const fetchSessions = async () => {
-try {
-  const response = await axios.get('http://localhost:3000/sessions') // Petición GET a la API
-  sessions.value = response.data // Asignar los datos de la API a sessions
-} catch (error) {
-  console.error('Error al cargar sesiones:', error)
-}
+  try {
+    const response = await axios.get('http://localhost:3000/sessions')
+    sessions.value = response.data
+  } catch (error) {
+    console.error('Error al cargar sesiones:', error)
+  }
 }
 
-// Llamar a fetchSessions al montar el componente
 onMounted(() => {
-fetchSessions()
+  fetchSessions()
+})
+
+watch(selectedSessions, (newValue) => {
+  if (newValue.length > 3) {
+    selectedSessions.value = newValue.slice(0, 3)
+  }
 })
 </script>
 
 <style scoped>
 .group:hover input[type="checkbox"] {
-opacity: 1;
+  opacity: 1;
 }
 </style>
