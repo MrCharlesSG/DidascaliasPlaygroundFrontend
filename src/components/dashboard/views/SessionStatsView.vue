@@ -1,9 +1,12 @@
 <template>
   <div class="min-h-screen bg-slate-100 p-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl font-bold text-slate-800 mb-8">
-        Estadísticas de Movimiento {{ isMultiSession ? '(Múltiples Sesiones)' : '' }}
+      <h1 class="text-2xl font-semibold text-slate-700 mb-2">
+      Sesión #{{ route.params.sessionId }}
       </h1>
+      <h2 class="text-3xl font-bold text-slate-800 mb-8">
+        Estadísticas de Movimiento
+      </h2>
 
       <div v-if="loading" class="text-center py-8">
         <LoaderIcon class="w-8 h-8 animate-spin mx-auto text-blue-500" />
@@ -29,14 +32,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div v-for="(sessionData, index) in sessionsData" :key="index" class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-slate-800 mb-4">
-              Información {{ isMultiSession ? `- Sesión #${sessionData.session[0].id}` : '' }}
+              Información 
             </h2>
             <p><strong>Fecha de inicio:</strong> {{ formatDate(sessionData.session[0].start_date) }}</p>
             <p><strong>Fecha de fin:</strong> {{ formatDate(sessionData.session[0].end_date) }}</p>
           </div>
 
-          <!-- Eventos para una sola sesión -->
-          <div v-if="!isMultiSession" class="bg-white rounded-lg shadow-md p-6">
+          <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-slate-800 mb-4">Eventos</h2>
             <ul class="space-y-2">
               <li v-for="event in allEvents" :key="event.id" class="flex items-center">
@@ -49,23 +51,7 @@
               </li>
             </ul>
           </div>
-        </div>
-
-        <!-- Eventos para múltiples sesiones -->
-        <div v-if="isMultiSession" class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold text-slate-800 mb-4">Eventos</h2>
-          <ul class="space-y-2">
-            <li v-for="event in allEvents" :key="`${event.sessionId}-${event.id}`" class="flex items-center">
-              <span 
-                class="w-3 h-3 rounded-full mr-2" 
-                :class="getEventColor(event.type)"
-              ></span>
-              <span class="font-medium">{{ event.type }}</span>
-              <span class="ml-2 text-slate-600">{{ formatTime(event.momento) }}</span>
-              <span class="ml-2 text-slate-400">(Sesión #{{ event.sessionId }})</span>
-            </li>
-          </ul>
-        </div>
+        </div> 
       </div>
     </div>
   </div>
@@ -175,7 +161,7 @@ const chartOptions = computed(() => ({
           color: '#fff',
           background: getEventColorHex(event.type)
         },
-        text: isMultiSession.value ? `${event.type} (Sesión #${event.sessionId})` : event.type
+        text: event.type
       }
     }))
   }

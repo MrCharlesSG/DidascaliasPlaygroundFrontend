@@ -71,7 +71,7 @@ const router = createRouter({
                 {
                     path: '/multi-session-stats/:sessionIds',
                     name: 'MultiSessionStatsPage',
-                    component: () => import('../components/dashboard/views/SessionStatsView.vue'),
+                    component: () => import('../components/dashboard/views/MultiSessionStatsView.vue'),
                     meta: { window: "Sessions Stats" }
                   },
                 
