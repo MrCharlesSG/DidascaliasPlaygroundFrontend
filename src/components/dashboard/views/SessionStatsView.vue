@@ -1,12 +1,22 @@
 <template>
   <div class="min-h-screen bg-slate-100 p-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-2xl font-semibold text-slate-700 mb-2">
-      Sesión #{{ route.params.sessionId }}
-      </h1>
-      <h2 class="text-3xl font-bold text-slate-800 mb-8">
-        Estadísticas de Movimiento
-      </h2>
+      <div class="flex justify-between items-center mb-8">
+        <div>
+          <h1 class="text-2xl font-semibold text-slate-700 mb-2">
+            Sesión #{{ route.params.sessionId }}
+          </h1>
+          <h2 class="text-3xl font-bold text-slate-800">
+            Estadísticas de Movimiento
+          </h2>
+        </div>
+        <div class="flex space-x-4">
+          <router-link to="/dashboard/analytics" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 flex items-center">
+            <Undo2 class="w-5 h-5 mr-2" />
+            Volver a Analytics
+          </router-link>
+        </div>
+      </div>
 
       <div v-if="loading" class="text-center py-8">
         <LoaderIcon class="w-8 h-8 animate-spin mx-auto text-blue-500" />
@@ -60,7 +70,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { LoaderIcon } from 'lucide-vue-next';
+import { LoaderIcon, Undo2 } from 'lucide-vue-next';
 import axios from 'axios';
 
 const sessionsData = ref([]);

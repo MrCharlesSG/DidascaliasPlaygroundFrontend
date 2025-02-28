@@ -1,7 +1,9 @@
 <template>
-  <SecondNav :groupsManagement="showGroups"/>
-  <GroupsManagement v-if="showGroups"/>
-  <UsersManagement v-else/>
+  <div class="p-4">
+    <SecondNav :groupsManagement="showGroups" class="mb-4"/>
+    <GroupsManagement v-if="showGroups"/>
+    <UsersManagement v-else/>
+  </div>
 </template>
   
 <script>

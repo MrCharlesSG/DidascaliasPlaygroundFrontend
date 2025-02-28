@@ -1,13 +1,17 @@
 <template>
-  <div id="secondNav">
-    <div class="groupsManagement"> <p @click="goToGroups()">Group Management</p> </div>
-    <div class="usersManagement"> <p @click="goToUsers()">User Management</p> </div>
+  <div id="secondNav" class="flex flex-row items-center ml-8">
+    <button @click="goToGroups()" :class="['groupsManagement', 'px-4 py-2 mx-2 rounded-l-lg', groupsManagement ? 'underline' : '']">
+      Group Management
+    </button>
+    <button @click="goToUsers()" :class="['usersManagement', 'px-4 py-2 mx-2 rounded-r-lg', usersManagement ? 'underline' : '']">
+      User Management
+    </button>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'TopNav',
+    name: 'SecondNav',
     
     props: ['groupsManagement'],
 
@@ -36,31 +40,5 @@
 </script>
 
 <style scoped>
-  #secondNav {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    margin-left: 30px;
-  }
-
-  #secondNav .groupsManagement {
-    border-radius: 10px 0px 0px 10px;
-    padding: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-decoration: v-bind("groupsManagement ? 'underline' : 'none'");
-  }
-
-  #secondNav .usersManagement {
-    border-radius: 0px 10px 10px 0px;
-    padding: 10px;
-    margin-left: 10px;
-    margin-right: 10px;
-    text-decoration: v-bind("usersManagement ? 'underline' : 'none'");
-  }
-
-  #secondNav .usersManagement p, #secondNav .groupsManagement p {
-    cursor: pointer;
-    margin-bottom: 0;
-  }
+  /* Tailwind CSS classes applied directly in the template */
 </style>

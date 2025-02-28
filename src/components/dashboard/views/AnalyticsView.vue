@@ -2,8 +2,8 @@
   <div class="min-h-screen bg-slate-50 p-8">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col md:flex-row mb-8">
-        <div class="flex-grow mb-8 md:mb-0">
-          <h1 class="text-3xl font-bold text-slate-800 mb-4">Sesiones de Usuario</h1>
+        <div class="flex-grow md:mb-0">
+          <h1 class="text-3xl font-bold text-slate-800">Sesiones de Usuario</h1>
         </div>
       </div>
 

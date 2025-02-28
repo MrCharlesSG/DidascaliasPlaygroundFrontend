@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-//import { useUserStore } from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -9,11 +9,6 @@ const router = createRouter({
             name: 'HomePage',
             component: () => import('../views/HomeView.vue'),
         },
-        // {
-        //     path: '/login',
-        //     name: 'HomePage',
-        //     component: () => import('../views/HomeView.vue'),
-        // },
         {
             path: '/ping',
             name: 'PingPage',
@@ -92,19 +87,24 @@ const router = createRouter({
             name: 'InstancesPage',
             component: () => import('../views/InstancesView.vue'),
         },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'NotFoundPage',
+            component: () => import('../views/NotFoundView.vue'),
+        }
     ],
 });
-
-router.beforeEach(async (to) => {
+/*es-lint ignore */
+router.beforeEach(async (to, from, next) => {
     //return true;
-    //const userStore = useUserStore();
+    const userStore = useUserStore();
 
-    // Control access to dashboard and instances
-    /*if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
+    //Control access to dashboard and instances
+    if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
         && !userStore.isLoggedIn) 
     {
         return '/';
-    }*/
+    }
 
     if (to.path == '/') {
         return '/dashboard';

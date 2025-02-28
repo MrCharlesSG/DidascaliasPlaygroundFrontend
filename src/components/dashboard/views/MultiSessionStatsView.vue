@@ -1,9 +1,17 @@
 <template>
   <div class="min-h-screen bg-slate-100 p-8">
     <div class="max-w-6xl mx-auto">
-      <h1 class="text-3xl font-bold text-slate-800 mb-8">
-        Estadísticas de Movimiento (Múltiples Sesiones)
-      </h1>
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-800">
+          Estadísticas de Movimiento (Múltiples Sesiones)
+        </h1>
+        <div class="flex space-x-4">
+          <router-link to="/dashboard/analytics" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 flex items-center">
+            <Undo2 class="w-5 h-5 mr-2" />
+            Volver a Analytics
+          </router-link>
+        </div>
+      </div>
 
       <div v-if="loading" class="text-center py-8">
         <LoaderIcon class="w-8 h-8 animate-spin mx-auto text-blue-500" />
@@ -28,41 +36,36 @@
       </div>
 
       <!-- Información de sesiones y eventos -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-semibold text-slate-800 mb-4">Información de las Sesiones</h2>
-          <div v-for="session in sessionsData" :key="session.session[0].id" class="mb-6">
-            <h3 class="text-xl font-semibold text-slate-700 mb-2">
-              Sesión #{{ session.session[0].id }}
-            </h3>
-            <p><strong>Fecha de inicio:</strong> {{ formatDate(session.session[0].start_date) }}</p>
-            <p><strong>Fecha de fin:</strong> {{ formatDate(session.session[0].end_date) }}</p>
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold text-slate-800 mb-4">Información de las Sesiones</h2>
+        <div v-for="session in sessionsData" :key="session.session[0].id" class="mb-6">
+          <h3 class="text-xl font-semibold text-slate-700 mb-2">
+            Sesión #{{ session.session[0].id }}
+          </h3>
+          <p><strong>Fecha de inicio:</strong> {{ formatDate(session.session[0].start_date) }}</p>
+          <p><strong>Fecha de fin:</strong> {{ formatDate(session.session[0].end_date) }}</p>
 
-            <h4 class="text-lg font-medium text-slate-800 mt-4 mb-2">Eventos:</h4>
-            <ul class="space-y-2">
-              <li v-for="event in session.events" :key="event.id" class="flex items-center">
-                <span 
-                  class="w-3 h-3 rounded-full mr-2"
-                  :class="getEventColor(event.type)"
-                ></span>
-                <span class="font-medium">{{ event.type }}</span>
-                <span class="ml-2 text-slate-600">{{ formatTime(event.momento) }}</span>
-              </li>
-            </ul>
-          </div>
+          <h4 class="text-lg font-medium text-slate-800 mt-4 mb-2">Eventos:</h4>
+          <ul class="space-y-2">
+            <li v-for="event in session.events" :key="event.id" class="flex items-center">
+              <span 
+                class="w-3 h-3 rounded-full mr-2"
+                :class="getEventColor(event.type)"
+              ></span>
+              <span class="font-medium">{{ event.type }}</span>
+              <span class="ml-2 text-slate-600">{{ formatTime(event.momento) }}</span>
+            </li>
+          </ul>
         </div>
+      </div>
     </div>
   </div>
 </template>
 
-
-
-
-
-  
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { LoaderIcon } from 'lucide-vue-next';
+import { LoaderIcon, Undo2 } from 'lucide-vue-next';
 import axios from 'axios';
 
 const sessionsData = ref([]);

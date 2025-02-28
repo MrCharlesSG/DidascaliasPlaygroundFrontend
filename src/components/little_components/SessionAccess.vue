@@ -1,9 +1,11 @@
 <template>
-  <h3 class="text-xl font-medium mb-2">Access a session</h3>
+  <div class="flex flex-col items-center justify-center">
+    <h3 class="text-xl font-medium mb-2">Access a session</h3>
     <label for="session" class="block text-lg font-medium mb-2">Session:</label>
     <input type="text" name="session" id="session" v-model="session" class="w-1/2 p-2 border border-gray-300 rounded-md mb-4"/>
-    <p class="errorMSG text-red-500 text-center mb-4" v-if="notFound">The session doesn't exist!</p>
     <input type="button" value="Access" v-on:click="accessSession()" :disabled="sessionRequest" class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600 w-1/2">
+  </div>
+   
 </template>
 
 <script>
@@ -38,13 +40,14 @@ export default {
             this.notFound = false;
           } else {
             console.log('Session not found!');
-            this.notFound = true;
+            // this.notFound = true;
+            alert('Session not found!');
           }
           this.sessionRequest = false;
         }).catch(err => {
           console.log(err)
           this.sessionRequest = false;
-          this.notFound = true;
+          alert('Session not found!');
         });
       }
     },

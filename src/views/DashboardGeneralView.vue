@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col md:flex-row h-screen relative">
-    <SideBar :shouldDisplay="masterShowSidebar" @alterSidebar="alterSidebar()" @clickedOnLink="alterSidebarOnClick()" :class="{'hidden': !masterShowSidebar, 'md:w-1/5 lg:w-1/6': masterShowSidebar}"/>
-    <div id="noSidebar" :class="{'w-full': !masterShowSidebar, 'md:w-4/5 lg:w-5/6': masterShowSidebar}" class="flex-grow overflow-y-auto">
+    <SideBar :shouldDisplay="masterShowSidebar" @alterSidebar="alterSidebar()" @clickedOnLink="alterSidebarOnClick()" :class="{'hidden': !masterShowSidebar, 'md:w-1/5 lg:w-1/5': masterShowSidebar}"/>
+    <div id="noSidebar" :class="{'w-full': !masterShowSidebar, 'md:w-4/5 lg:w-4/5': masterShowSidebar}" class="flex-grow overflow-y-auto">
       <TopNav :title="this.$route.meta.window.charAt(0).toUpperCase() + this.$route.meta.window.slice(1)" @alterSidebar="alterSidebar()"/>
       <router-view/>
     </div>
