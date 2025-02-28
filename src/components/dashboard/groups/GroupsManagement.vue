@@ -10,8 +10,8 @@
 
 <script>
 import GroupLittle from '@/components/dashboard/groups/GroupLittle.vue';
-// import { mapActions } from 'pinia';
-// import { useUserStore } from '@/store/useUserStore';
+import { mapActions } from 'pinia';
+import { useUserStore } from '@/store/useUserStore';
 
 export default {
   name: 'GroupsManagement',
@@ -57,7 +57,7 @@ export default {
   },
 
   methods: {
-    // ...mapActions(useUserStore, ['apiCall']),
+    ...mapActions(useUserStore, ['apiCall']),
   },
 
   computed: {
