@@ -1,30 +1,28 @@
 <template>
-  <div id="topNav">
-    <div class="showHideSidebar" id="topNavItem">
-      <img src="@/assets/icons/black_menu.png" alt="menu" id="menu"
-        @click="alterSidebar()">
+  <div id="topNav" class="bg-gray-100 border-b border-gray-300 p-4 flex items-center justify-between">
+    <div class="showHideSidebar md:block">
+      <img src="@/assets/icons/black_menu.png" alt="menu" id="menu" @click="alterSidebar()" class="w-8 h-8 pt-1 cursor-pointer hidden">
     </div>
-    <div class="title" id="topNavItem"> <h1>{{ title }}</h1> </div>
-    <div class="language" id="topNavItem">
-      <select>
-        <option value="en">English</option>
-        <option value="es">Castellano</option>
-        <option value="ca">Català</option>
-      </select>
+    <div class="title flex-grow px-2 pt-1">
+      <h1 class="m-0 text-2xl font-normal text-gray-500">{{ title }}</h1>
     </div>
-    <div class="parentDropdown" id="topNavItem" 
-      @mouseover="isDropdown = true"  @mouseleave="isDropdown = false">
-      <div class="avatar">
-        <img src="@/assets/avatars/default.jpeg" alt="avatar" class="avatar"/>
-        <!-- put it on the right of the image-->
-        <p class="username">{{ nameFromStore }} ⬇️</p>
+    <div class="flex items-center space-x-4">
+      <div class="language">
+        <select class="border border-gray-300 rounded p-1">
+          <option value="en">English</option>
+          <option value="es">Castellano</option>
+          <option value="ca">Català</option>
+        </select>
       </div>
-
-      <div class="avatarDropdown" v-if="isDropdown">
-        <p class="clickable" v-on:click="goToProfile()">Profile</p>
-        <!-- TODO: Log-out -->
-        <!-- TODO: Make it prettier -->
-        <p class="clickable" @click="logOut()">Log-out</p>
+      <div class="parentDropdown relative" @mouseover="isDropdown = true" @mouseleave="isDropdown = false">
+        <div class="avatar flex items-center cursor-pointer me-5">
+          <img src="@/assets/avatars/default.jpeg" alt="avatar" class="w-10 h-10 rounded-full">
+          <p class="ml-2">{{ nameFromStore }} ⬇️</p>
+        </div>
+        <div class="absolute top-full right-0 w-36 bg-white border border-gray-300 rounded shadow-lg z-10 text-center" v-if="isDropdown">
+          <p class="clickable cursor-pointer hover:bg-gray-100 py-2 px-4 rounded" @click="goToProfile()">Profile</p>
+          <p class="clickable cursor-pointer hover:bg-gray-100 py-2 px-4 rounded" @click="logOut()">Log-out</p>
+        </div>
       </div>
     </div>
   </div>
@@ -63,11 +61,11 @@
       },
 
       // Store function import
-      ...mapActions(useUserStore, { logoutOnStore: 'logout' } ),
+      ...mapActions(useUserStore, { logoutOnStore: 'logout' }),
 
       logOut() {
         this.logoutOnStore();
-        router.push('/');
+        router.push('/login');
       }
     },
 
@@ -79,127 +77,25 @@
 </script>
 
 <style scoped>
-  #topNav {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #e3e3e3;
-    
-    padding: 15px;
-    padding-left: 30px;
-    padding-right: 100px;
-    margin-bottom: 0;
-    margin-top: 0px;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  #topNav h1 {
-    margin: 0;
-    font-size: 1.5em;
-    font-weight: 400;
-    color: #666;
-  }
-
-  #topNav .showHideSidebar {
-    display: none;
-  }
-
-  #topNav .title {
-    flex-grow: 3;
-  }
-
-  #topNav .language {
-    flex-grow: 1;
-    text-align: right;
-  }
-
-  #topNav .avatar {
-    flex-grow: 1;
-    text-align: right;
-
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-
-    /* TODO: Fix clickbox: it's bigger than expected */
-    cursor: pointer;
-  }
-
-  #topNav .avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    justify-self: end;
-  }
-
-  #topNav .avatar p {
-    margin: 0;
-    margin-left: 10px;
-    justify-self: start;
-  }
-
-  #topNav .parentDropdown {
-    position: relative;
-  }
-
-  #topNav .avatarDropdown {
-    position: absolute;
-    top: 99%;
-    right: 0;
-    width: 150px;
-    height: 100px;
-    
-    padding: 15px;
-
-    background-color: #f5f5f5;
-    border: 1px solid #e3e3e3;
-    border-radius: 5px;
-    z-index: 1;
-
-    text-align: center;
-    font-size: 20px;
-    padding-top: 20px;
-  }
-
-  #topNav .avatarDropdown p {
-    margin: 0;
-    margin-bottom: 25px;
-  }
-
-  #menu {
-    width: 30px;
-    height: 30px;
-    padding-top: 3px;
-    cursor: pointer;
-  }
-
-  .clickable {
-    cursor: pointer;
-  }
-
-  @media (max-width: 960px) {
-    #topNav .showHideSidebar {
+  @media (max-width: 860px) {
+    .showHideSidebar img {
       display: block;
-      flex-grow: 2;
     }
   }
 
   @media (max-width: 600px) {
-    #topNav .username {
+    .username {
       display: none;
     }
 
     #topNav {
-      padding: 15px 20px 15px 20px;
+      padding: 15px 20px;
       justify-content: space-evenly;
       align-items: center;
     }
 
-    #topNav #topNavItem {
+    #topNavItem {
       margin-left: 10px;
     }
-
   }
-
 </style>

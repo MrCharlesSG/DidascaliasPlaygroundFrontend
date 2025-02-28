@@ -1,17 +1,17 @@
 <template>
-  <div class="mySession">
-    <h2 style="text-align: start;">My sessions:</h2>
+  <div class="mySession mt-5 mx-2 mb-12 text-center">
+    <h2 class="text-left text-2xl font-semibold mb-4">My sessions:</h2>
 
-    <div id="mySessionFlex">
-      <div class="box1" id="mySessionFlexItem">
-        <h3>Box1</h3>
+    <div id="mySessionFlex" class="flex flex-wrap justify-center items-center gap-8">
+      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48">
+        <h3 class="text-xl font-medium mb-2">Box1</h3>
       </div>
-      <div class="box2" id="mySessionFlexItem">
-        <h3>Box2</h3>
+      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48">
+        <h3 class="text-xl font-medium mb-2">Box2</h3>
       </div>
-      <div class="box3" id="mySessionFlexItem">
-        <h3>Access current streaming</h3>
-        <button v-on:click="this.sentToReceiver()">CLICK HERE [beta]</button>
+      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 flex flex-col justify-center items-center h-48">
+        <h3 class="text-xl font-medium mb-2">Access current streaming</h3>
+        <button v-on:click="this.sentToReceiver()" class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600 mt-4">CLICK HERE [beta]</button>
       </div>
     </div>
   </div>
@@ -58,34 +58,7 @@
 </script>
 
 <style scoped>
-  .mySession {
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 50px;
-    text-align: center;
-  }
-
-  #mySessionFlex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  #mySessionFlexItem {
-    min-width: 180px;
-    width: 30%;
-    height: 200px;
-    background-color: whitesmoke;
-    border: 1px solid gray;
-    padding: 5px;
-  }
-
-  @media (max-width: 600px) {
-    #mySessionFlexItem {
-      width: 100%;
-      height: 150px;
-    }
+  .bigNumber {
+    font-size: 50px;
   }
 </style>

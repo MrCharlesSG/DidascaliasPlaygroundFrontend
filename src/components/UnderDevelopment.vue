@@ -1,7 +1,6 @@
 <template>
   <!-- Under development image -->
-  <div id="underDevelopment">
-    <h1>Under development!</h1>
+  <div id="underDevelopment" class="flex flex-col items-center justify-center h-5/6">
     <img src="../assets/underDevelopment.png" alt="under development" id="underDevelopmentImage">
   </div>
 </template>

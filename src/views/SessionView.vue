@@ -1,19 +1,19 @@
 <template>
-  <div id="session">
-    <div id="topBar">
-      <input type="button" value="Back" @click="$router.push('/')">
+  <div id="session" class="flex flex-col">
+    <div id="topBar" class="flex flex-row justify-between items-center h-12 p-7 bg-gray-800 text-white">
+      <input type="button" value="Back" @click="$router.push('/')" class="bg-gray-800 text-white border border-white rounded px-5 py-2 cursor-pointer hover:bg-white hover:text-gray-800">
       <span>ID: {{ $route.params.sessionId }}</span>
     </div>
 
-    <div class="dashboard">
-      <ClassMap id="classMap" class="flexItem" 
+    <div class="dashboard flex flex-1 flex-row justify-between items-center">
+      <ClassMap id="classMap" class="flexItem min-w-[400px] max-w-[50%] min-h-[350px] max-h-[40%] border border-gray-800 box-border text-center w-full h-full" 
         :students="sessionInfo.students" @clickedEmit="updateClicked"/>
-      <AvatarStats id="avatarStats" class="flexItem" :show="(this.selected != -1)" 
+      <AvatarStats id="avatarStats" class="flexItem min-w-[400px] max-w-[50%] min-h-[350px] max-h-[40%] border border-gray-800 box-border text-center w-full h-full" :show="(this.selected != -1)" 
         :avatar="sessionInfo.students[selectedStudentNoNegative]"/>
     </div>
-    <div class="dashboard">
-      <GlobalStats id="globalStats" :sessionID="$route.params.sessionId" class="flexItem"/>
-      <EventsCall class="flexItem"/>
+    <div class="dashboard flex flex-1 flex-row justify-between items-center">
+      <GlobalStats id="globalStats" :sessionID="$route.params.sessionId" class="flexItem min-w-[400px] max-w-[50%] min-h-[350px] max-h-[40%] border border-gray-800 box-border text-center w-full h-full"/>
+      <EventsCall class="flexItem min-w-[400px] max-w-[50%] min-h-[350px] max-h-[40%] border border-gray-800 box-border text-center w-full h-full"/>
     </div>
   </div>
 </template>
@@ -28,10 +28,10 @@
     name: 'MissionControlView',
 
     components: {
-    ClassMap,
-    AvatarStats,
-    GlobalStats,
-    EventsCall,
+      ClassMap,
+      AvatarStats,
+      GlobalStats,
+      EventsCall,
     },
 
     data () {
@@ -192,45 +192,12 @@
 </script>
 
 <style scoped>
-
-  #session {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  #topBar {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 50px;
-    padding: 0 20px;
-    background-color: #333;
-    color: #fff;
-  }
-
-  #topBar input {
-    background-color: #333;
-    color: #fff;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    padding: 5px 20px;
-    cursor: pointer;
-  }
-
-  #topBar input:hover {
-    background-color: #fff;
-    color: #333;
-  }
-
   .dashboard {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    /*padding: 20px;*/
   }
 
   .flexItem {
@@ -238,18 +205,13 @@
     max-width: 50%;
     min-height: 350px;
     max-height: 40%;
-
-    border: 1px solid #333;
+    border: 1px solid #2d3748;
     box-sizing: border-box;
-
     text-align: center;
     width: 100%;
     height: 100%;
-
-    /*border-radius: 11px;*/
   }
 
-  /*With mobile phone size */
   @media (max-width: 768px) {
     .dashboard {
       flex-direction: column;
@@ -262,6 +224,4 @@
       max-height: 40%;
     }
   }
-
-
 </style>

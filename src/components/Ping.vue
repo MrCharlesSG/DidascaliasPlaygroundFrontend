@@ -1,15 +1,13 @@
 <template>
-    <h2>Ping component</h2>
-    <button @click="ping" :disabled="!notRunning">Ping request!</button>
-    <!-- <p>From host to server: {{ fromHostToServer }} ms</p> -->
-    <!-- <p>From server to host: {{ fromServerToHost }} ms</p> -->
-    <br> <br> <p>Lattency: {{ totalTransmissionTime }} ms</p>
-
-    <!--
-    <p style="color:red; font-weight: bold;">WARNING</p>
-    <p>El tiempo especificado no es fiable. Depende de la diferencia de tiempos de reloj entre los hosts.</p>
-        -->
-    <p>La petición será enviada al servidor de juego.</p>
+    <div class="p-4">
+        <h2 class="text-2xl font-bold mb-4">Ping component</h2>
+        <button @click="ping" :disabled="!notRunning" class="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50">Ping request!</button>
+        <br><br>
+        <p class="mt-4">Latency: {{ totalTransmissionTime }} ms</p>
+        <p class="mt-4 text-red-600 font-bold">WARNING</p>
+        <p class="text-red-600">El tiempo especificado no es fiable. Depende de la diferencia de tiempos de reloj entre los hosts.</p>
+        <p class="mt-4">La petición será enviada al servidor de juego.</p>
+    </div>
 </template>
 
 <script>

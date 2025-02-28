@@ -1,22 +1,27 @@
 <template>
-  <div id="startPage">
-    <h1>Mision Control</h1>
-    <!--Double image at the same row-->
-    <UniversitiesLogos/>
+  <div id="startPage" class="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-5">
+    <h1 class="text-4xl font-bold mb-8">Mission Control</h1>
+    <UniversitiesLogos class="mb-8"/>
 
-    <br> <!-- TODO: Make session login a new component -->
-    <SessionAccess/>
-    <br> <br>
-    <form action="" @submit.prevent>
-      <label for="email" class="label">Email:</label> <br>
-      <input type="email" class="inputBox" name="email" id="email" placeholder="email" v-model="email"/>
-      <br> <br>
-      <label for="password" class="label">Password:</label> <br>
-      <input type="password" class="inputBox" name="password" id="password" placeholder="password" v-model="password"/>
-      <p class="errorMSG" v-if="loginError">User or password incorrect!</p>
-      <br v-if="!loginError"> <br v-if="!loginError">
-      <input type="button" value="Log-in" style="margin-right:15px" v-on:click="logIn()" :disabled="userRequest">
-      <input type="button" value="Register">
+
+    <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-md mb-8 flex flex-col justify-center items-center">
+      <SessionAccess/>
+    </div>
+    
+    <form action="" @submit.prevent class="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
+      <div class="mb-4">
+        <label for="email" class="block text-lg font-medium mb-2">Email:</label>
+        <input type="email" class="inputBox w-full p-2 border border-gray-300 rounded-md" name="email" id="email" placeholder="email" v-model="email"/>
+      </div>
+      <div class="mb-4">
+        <label for="password" class="block text-lg font-medium mb-2">Password:</label>
+        <input type="password" class="inputBox w-full p-2 border border-gray-300 rounded-md" name="password" id="password" placeholder="password" v-model="password"/>
+      </div>
+      <p class="errorMSG text-red-500 text-center mb-4" v-if="loginError">User or password incorrect!</p>
+      <div class="flex justify-between items-center">
+        <input type="button" value="Log-in" class="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-blue-600" v-on:click="logIn()" :disabled="userRequest">
+        <input type="button" value="Register" class="bg-gray-500 text-white px-4 py-2 rounded-md cursor-pointer hover:bg-gray-600">
+      </div>
     </form>
   </div>
 </template>
@@ -94,35 +99,8 @@
 </script>
   
 <style scoped>
-  
-  .inputBox {
-    width: 50%;
-  }
-
-  #startPage {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
-
   .errorMSG {
-    background-color: #ff5c00;
-    color: lightcyan;
-    margin-left: 37%;
-    margin-right: 37%;
-    border-radius: 10px;
-  }
-
-  .label {
-    font-size: 18px;
-  }
-
-  ::placeholder {
     text-align: center;
   }
 
 </style>
-  

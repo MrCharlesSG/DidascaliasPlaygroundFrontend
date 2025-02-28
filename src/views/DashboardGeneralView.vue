@@ -1,17 +1,16 @@
 <template>
-  <SideBar :shouldDisplay="masterShowSidebar" @alterSidebar="alterSidebar()" 
-    @clickedOnLink="alterSidebarOnClick()"/>
-  <div id="noSidebar" v-if="showNoSidebar">
-    <TopNav :title="this.$route.meta.window.charAt(0).toUpperCase() + this.$route.meta.window.slice(1)"
-      @alterSidebar="alterSidebar()"/>
-    <router-view/>
+  <div class="flex flex-col md:flex-row h-screen relative">
+    <SideBar :shouldDisplay="masterShowSidebar" @alterSidebar="alterSidebar()" @clickedOnLink="alterSidebarOnClick()" :class="{'hidden': !masterShowSidebar, 'md:w-1/5 lg:w-1/6': masterShowSidebar}"/>
+    <div id="noSidebar" :class="{'w-full': !masterShowSidebar, 'md:w-4/5 lg:w-5/6': masterShowSidebar}" class="flex-grow overflow-y-auto">
+      <TopNav :title="this.$route.meta.window.charAt(0).toUpperCase() + this.$route.meta.window.slice(1)" @alterSidebar="alterSidebar()"/>
+      <router-view/>
+    </div>
   </div>
 </template>
-  
+
 <script>
   import SideBar from '@/components/dashboard/SideBar.vue';
   import TopNav from '@/components/dashboard/TopNav.vue';
-  
 
   export default {
     name: 'DashBoard',
@@ -66,12 +65,7 @@
 </script>
 
 <style scoped>
-  
-  #noSidebar {
-    margin-left: 330px;
-  }
-
-  @media (max-width: 960px) {
+  @media (max-width: 860px) {
     #sidebar {
       height: 100%;
       width: 100%;
@@ -85,6 +79,6 @@
 
 <style>
   body {
-    margin: 0 0 0 0;
+    margin: 0;
   }
 </style>

@@ -1,11 +1,13 @@
 <template>
-  <EvaluatorShow/>
-  <SessionShow/>
-  <EventsList/>
+  <div class="p-5">
+    <EvaluatorShow/>
+    <SessionShow/>
+    <!-- <EventsList/> -->
+  </div>
 </template>
   
 <script>
-  import EventsList from '@/components/little_components/EventsList.vue';
+  // import EventsList from '@/components/little_components/EventsList.vue';
   import EvaluatorShow from '@/components/dashboard/general/EvaluatorShow.vue';
   import SessionShow from '@/components/dashboard/general/SessionShow.vue';
   
@@ -14,7 +16,7 @@
     name: 'DashBoard',
 
     components: {
-      EventsList,
+      // EventsList,
       EvaluatorShow,
       SessionShow,
     },

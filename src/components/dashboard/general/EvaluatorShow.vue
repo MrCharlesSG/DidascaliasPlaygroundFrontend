@@ -1,38 +1,36 @@
 <template>
-  <div class="evaluator">
-    <h2 style="text-align: start;">Evaluator:</h2>
+  <div class="evaluator mt-5 mx-2 mb-12 text-center">
+    <h2 class="text-left text-2xl font-semibold mb-4">Evaluator:</h2>
 
-    <div id="evaluatorFlex">
-
-      <div class="box1" id="evaluatorFlexItem" @click="goToGroups()">
-        <h3>Groups</h3>
-        <p class="bigNumber"> {{ groupsAmount }} </p>
+    <div id="evaluatorFlex" class="flex flex-wrap justify-center items-center gap-8">
+      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToGroups()">
+        <h3 class="text-xl font-medium mb-2">Groups</h3>
+        <p class="bigNumber text-5xl font-bold"> {{ groupsAmount }} </p>
       </div>
 
-      <div class="box2" id="evaluatorFlexItem" @click="goToUsers()">
-        <h3>Students</h3>
-        <p class="bigNumber"> {{ studentsAmount }} </p>
+      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToUsers()">
+        <h3 class="text-xl font-medium mb-2">Students</h3>
+        <p class="bigNumber text-5xl font-bold"> {{ studentsAmount }} </p>
       </div>
 
-      <div class="box3" id="evaluatorFlexItem">
-        <h3>Access a session</h3>
+      <div class="bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48 flex flex-col justify-center items-center">
         <SessionAccess/>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
+
   import SessionAccess from '@/components/little_components/SessionAccess.vue';
-  import { useUserStore } from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
   import { mapActions } from 'pinia';
 
   export default {
     name: 'EvaluatorShow',
 
     components: {
-      SessionAccess,
+       SessionAccess,
     }, 
 
     data() {
@@ -73,51 +71,7 @@
 </script>
 
 <style scoped>
-  .evaluator {
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 50px;
-    text-align: center;
-  }
-
-  #evaluatorFlex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  #evaluatorFlexItem {
-    min-width: 180px;
-    width: 30%;
-    height: 200px;
-    background-color: whitesmoke;
-    border: 1px solid gray;
-    padding: 5px;
-  }
-
-  .box1, .box2 {
-    cursor: pointer;
-  }
-
-  .box3 {
-    /* Center vertically the content*/
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
   .bigNumber {
     font-size: 50px;
-  }
-
-  @media (max-width: 600px) {
-    #evaluatorFlexItem {
-      width: 100%;
-      height: 150px;
-    }
   }
 </style>
