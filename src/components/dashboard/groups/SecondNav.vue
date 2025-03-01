@@ -1,5 +1,5 @@
 <template>
-  <div id="secondNav" class="flex flex-row items-center ml-8">
+  <div id="secondNav" class="flex flex-row items-center">
     <button @click="goToGroups()" :class="['groupsManagement', 'px-4 py-2 mx-2 rounded-l-lg', groupsManagement ? 'underline' : '']">
       Group Management
     </button>

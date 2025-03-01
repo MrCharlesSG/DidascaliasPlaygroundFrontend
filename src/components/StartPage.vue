@@ -63,7 +63,7 @@
 
           console.log("Sending login request...");
 
-          fetch("http:/badUri/api/login", {
+          fetch("https://cyclops-dev.uab.cat/api/login", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

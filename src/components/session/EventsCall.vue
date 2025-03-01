@@ -50,7 +50,7 @@ export default {
     enviarTexto(inputText)
     {
       console.log("Sending event " + '-1');
-      fetch("http:/badUri/api/session/" + this.$route.params.sessionId + "/callEventWS/" + "-1" + "/"+ inputText,
+      fetch("https://cyclops-dev.uab.cat/api/session/" + this.$route.params.sessionId + "/callEventWS/" + "-1" + "/"+ inputText,
       {
         method: 'GET',
         headers: { 
@@ -63,7 +63,7 @@ export default {
       .catch(error => { console.log(error) });
     },
     getEvents() {
-      fetch("http:/badUri/api/session/" + this.$route.params.sessionId + "/available-eventsWS")
+      fetch("https://cyclops-dev.uab.cat/api/session/" + this.$route.params.sessionId + "/available-eventsWS")
       .then(response => response.json())
       .then(retrievedData => {
         if (retrievedData.data == null || retrievedData.data == undefined) {
@@ -93,7 +93,7 @@ export default {
 
     sendEvent(eventId) {
       console.log("Sending event " + eventId);
-      fetch("http:/badUri/api/session/" + this.$route.params.sessionId + "/callEventWS/" + eventId,
+      fetch("https://cyclops-dev.uab.cat/api/session/" + this.$route.params.sessionId + "/callEventWS/" + eventId,
       {
         method: 'GET',
         headers: { 

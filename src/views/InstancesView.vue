@@ -40,7 +40,7 @@ export default {
     ...mapActions(useUserStore, ['apiCall']),
 
     getInstances() {
-      this.apiCall('http:/badUri/api/getInstances')
+      this.apiCall('https://cyclops-dev.uab.cat/api/getInstances')
       .then(res => {
         this.instances = res.data;
       }).catch(error => console.log(error));

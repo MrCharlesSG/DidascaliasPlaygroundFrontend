@@ -1,9 +1,11 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-2xl font-semibold mb-4">Groups | {{ groupsAmount }}</h2>
-    <div class="flex flex-wrap gap-4">
-      <GroupLittle v-for="item in groups" :key="item.name"
-        :groupInfo="item"/>
+  <div class="flex justify-center items-center h-full p-4">
+    <div>
+      <h2 class="text-2xl font-semibold mb-4 text-center sm:text-left">Groups | {{ groupsAmount }}</h2>
+      <div class="flex flex-wrap gap-4 justify-center">
+        <GroupLittle v-for="item in groups" :key="item.name"
+          :groupInfo="item"/>
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +40,7 @@ export default {
     // Get groups from DB TODO: change to real DB
     // TODO: Handle empty response (Nonify)
 
-    this.apiCall('badUri')
+    this.apiCall('https://cyclops-dev.uab.cat/api/getGroups')
     .then(data => {
       this.groups = data.groups; 
     })

@@ -3,14 +3,18 @@
     <h2 class="text-left text-2xl font-semibold mb-4">Evaluator:</h2>
 
     <div id="evaluatorFlex" class="flex flex-wrap justify-center items-center gap-8">
-      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToGroups()">
+      <div class="cursor-pointer flex flex-col bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToGroups()">
         <h3 class="text-xl font-medium mb-2">Groups</h3>
-        <p class="bigNumber text-5xl font-bold"> {{ groupsAmount }} </p>
+        <div class="flex-grow flex items-center justify-center">
+          <p class="text-3xl font-semibold">{{ groupsAmount }}</p>
+        </div>
       </div>
 
-      <div class="cursor-pointer bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToUsers()">
+      <div class="cursor-pointer flex flex-col bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48" @click="goToUsers()">
         <h3 class="text-xl font-medium mb-2">Students</h3>
-        <p class="bigNumber text-5xl font-bold"> {{ studentsAmount }} </p>
+        <div class="flex-grow flex items-center justify-center">
+          <p class="text-3xl font-semibold">{{ studentsAmount }}</p>
+        </div>
       </div>
 
       <div class="bg-gray-100 border border-gray-300 p-4 rounded-lg shadow-md w-full md:w-1/4 mb-3 h-48 flex flex-col justify-center items-center">
@@ -21,16 +25,15 @@
 </template>
 
 <script>
-
   import SessionAccess from '@/components/little_components/SessionAccess.vue';
-import { useUserStore } from '@/store/useUserStore';
+  import { useUserStore } from '@/store/useUserStore';
   import { mapActions } from 'pinia';
 
   export default {
     name: 'EvaluatorShow',
 
     components: {
-       SessionAccess,
+      SessionAccess,
     }, 
 
     data() {
@@ -55,7 +58,7 @@ import { useUserStore } from '@/store/useUserStore';
       },
 
       updateStats() {
-        this.apiCall('http:/badUri/api/getDashboard')
+        this.apiCall('https://cyclops-dev.uab.cat/api/getDashboard')
         .then(data => {
           this.groupsAmount = data.groupAmount;
           this.studentsAmount = data.studentAmount;
@@ -71,7 +74,5 @@ import { useUserStore } from '@/store/useUserStore';
 </script>
 
 <style scoped>
-  .bigNumber {
-    font-size: 50px;
-  }
+  /* Tailwind CSS classes applied directly in the template */
 </style>

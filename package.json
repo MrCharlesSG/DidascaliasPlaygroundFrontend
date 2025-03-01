@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && npm run send",
-    "send": "scp -i ~/.ssh/tfg1599920 -P 169 -r ~/Documents/\"OneDrive - UAB\"/\"4t any\"/TFG_1599920/frontend/servidordidascalias/dist/* root@cyclops.uab.cat:/var/www/html",
+    "send": "scp -i C://Users//alexv//.ssh//id_ed25519 -P 169 -r C://Users//alexv//Documents//GitHub//DidascaliasPlaygroundFrontend//dist//* root@cyclops-dev.uab.cat:/var/www/html",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

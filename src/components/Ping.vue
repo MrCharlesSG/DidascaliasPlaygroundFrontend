@@ -35,7 +35,7 @@ export default {
                 
                 // Send the request
                 //console.log("Sending ping request to " + process.env.VUE_APP_GAME_SERVER_URL + "/ping")
-                fetch("http:/badUri/api" + "/ping")
+                fetch("https://cyclops-dev.uab.cat/api" + "/ping")
                 .then(response => response.json())
                 .then(data => {
 

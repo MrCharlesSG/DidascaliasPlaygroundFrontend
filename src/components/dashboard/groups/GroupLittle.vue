@@ -1,11 +1,11 @@
 <template>
   <div id="group" class="bg-gray-200 w-72 h-56 p-3 rounded-lg shadow-md">
-    <h3 class="groupName text-xl font-bold mb-2 ml-2">{{ name }}</h3>
+    <h3 class="groupName text-xl font-bold mb-2 ml-2 text-center sm:text-left">{{ name }}</h3>
     <div id="groupTutorInfo" class="flex flex-row items-center mb-2 ml-1 mr-5 bg-gray-300 rounded-full p-2">
       <img class="groupTutorAvatar w-12 h-12 rounded-full mr-2" src="@/assets/avatars/default.jpeg" alt="Group Avatar"/>
-      <div id="groupTutorNameEmail" class="flex flex-col ml-5">
-        <p class="groupTutorName m-0 mt-1">{{ tutorName }}</p>
-        <p class="groupTutorEmail m-0 mt-1">{{ tutorEmail }}</p>
+      <div id="groupTutorNameEmail" class="flex flex-col ml-1 overflow-hidden">
+        <p class="groupTutorName m-0 mt-1 whitespace-nowrap overflow-hidden text-ellipsis">{{ tutorName }}</p>
+        <p class="groupTutorEmail m-0 mt-1 whitespace-nowrap overflow-hidden text-ellipsis">{{ tutorEmail }}</p>
       </div>
     </div>
     <div id="groupMoreInfo" class="flex flex-row justify-around mt-5">

@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <h2 class="text-2xl font-semibold mb-4">Students | {{ studentsAmount }}</h2>
+    <h2 class="text-2xl font-semibold mb-4 text-center sm:text-left">Students | {{ studentsAmount }}</h2>
     <div class="flex items-center mb-4">
       <p class="text-xl">🔍</p>
       <input type="text" name="searchBar" id="searchBar" v-model="search"
@@ -71,7 +71,7 @@ export default {
     // Get students from DB TODO: change to real DB
     // TODO: Handle empty response (Nonify)
 
-    this.apiCall('http:/badUri/api/getStudents')
+    this.apiCall('https://cyclops-dev.uab.cat/api/getStudents')
     .then(data => {
       this.students = data.students;
     })

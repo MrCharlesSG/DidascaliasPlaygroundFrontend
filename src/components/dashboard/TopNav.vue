@@ -65,7 +65,7 @@
 
       logOut() {
         this.logoutOnStore();
-        router.push('/login');
+        router.push('/');
       }
     },
 

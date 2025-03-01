@@ -1,6 +1,6 @@
 /*es-lint-disable */
 import { createRouter, createWebHistory } from 'vue-router';
-// import { useUserStore } from '@/store/useUserStore';
+import { useUserStore } from '@/store/useUserStore';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -97,20 +97,27 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-    // const userStore = useUserStore();
+    //return true;
+    const userStore = useUserStore();
 
-    // //Control access to dashboard and instances
-    // if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
-    //     && !userStore.isLoggedIn) 
-    // {
-    //     return '/';
-    // }
+    // Control access to dashboard and instances
+    if ((to.path.split('/')[1] == 'dashboard' || to.path.split('/')[1] == 'instances') 
+        && !userStore.isLoggedIn) 
+    {
+        return '/';
+    }
 
-    if (to.path == '/') {
+    if (to.path == '/' && userStore.isLoggedIn) {
         return '/dashboard';
+    }
+
+    if (to.path.split('/')[1] == 'instances') {
+        let isSuper = await userStore.isSuperUser();
+        return isSuper ? true : '/dashboard';
     }
 
     
 });
+
 
 export default router;

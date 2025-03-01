@@ -34,7 +34,7 @@
       ...mapActions(useUserStore, ['apiCall']),
 
       updateStats() {
-        this.apiCall('http:/badUri/api/getSessionShow')
+        this.apiCall('https://cyclops-dev.uab.cat/api/getSessionShow')
         .then(data => {
           data;
           /* TODO: Set data */
